@@ -57,8 +57,8 @@ export default class LoginFrom extends React.Component {
       return (
         <div className="d-block">
             <Form onSubmit={this.handleSubmit}>
-                <Form.Group className="mx-1 my-3" controlId="formBasicEmail">
-                    <Form.Label>Email:</Form.Label>
+                <Form.Group className="mx-1 my-3 control" controlId="formBasicEmail">
+                    <Form.Label><strong>Email:</strong></Form.Label><span className="point mx-2">«</span>
                     <Form.Control type="email" className="form-control"  name="email" value={this.state.email} onChange={this.handleInputChange} maxLength="100" required/>
                 </Form.Group>
                 <Form.Group className="mx-1 my-3 control">
