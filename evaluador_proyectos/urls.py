@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+import build.static as static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
@@ -30,4 +31,5 @@ urlpatterns = [
     path('RegisterUser', TemplateView.as_view(template_name="index.html")),
     path('RecoveryAccount', TemplateView.as_view(template_name="index.html")),
     path('', TemplateView.as_view(template_name="index.html")),
+    path('static', include(static)),
 ]
