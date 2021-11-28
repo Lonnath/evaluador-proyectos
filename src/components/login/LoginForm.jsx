@@ -36,12 +36,12 @@ export default class LoginFrom extends React.Component {
                     const datos = JSON.parse(response.data.DATA)
                     if(response.data.CODE===1){
                         sessionStorage.setItem('sesion', response.data.DATA);
-                        if(datos.tipo_usuario.toLowerCase() === 'autor'){
-                            window.location = "/User";
-                        }else if(datos.tipo_usuario.toLowerCase() === 'evaluador'){
-                            window.location = "/Evaluator";
-                        }else if(datos.tipo_usuario.toLowerCase() === 'admin'){
+                        if(datos.tipo_usuario === 1){
                             window.location = '/Admin';
+                        }else if(datos.tipo_usuario === 2){
+                            window.location = "/User";
+                        }else if(datos.tipo_usuario === 3){
+                            window.location = "/Evaluator";
                         }
                     }
                 

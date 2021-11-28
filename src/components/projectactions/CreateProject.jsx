@@ -33,7 +33,7 @@ export default class CreateProject extends React.Component {
             keysword : this.state.keysword,
             resumen : this.state.resumen,
             topic : this.state.topic,
-            autor : JSON.parse(sessionStorage.getItem('sesion')).user_id,
+            autor : JSON.parse(sessionStorage.getItem('sesion')).id,
             file : this.state.file,
             now : timenow,
         }
@@ -87,7 +87,7 @@ export default class CreateProject extends React.Component {
                 </div>
                 <div className="d-flex justify-content-end mb-2"> 
                     <Button variant="success mx-2" className="close-button" type="submit">
-                        Registrar
+                        Postular
                     </Button>
                 </div>
             </Form>

@@ -10,7 +10,8 @@ export default class RegisterUser extends React.Component {
             nombre: "",
             email: "",
             password:"",
-            tipo: "Autor",
+            tipo: 2,
+            institucion: "",
             alerta : "",
             loading : true,
         };
@@ -34,6 +35,7 @@ export default class RegisterUser extends React.Component {
             email: this.state.email,
             password: this.state.password,
             tipo : this.state.tipo,
+            institucion : this.state.institucion,
         }
         
         this.setState({loading:false});
@@ -80,9 +82,14 @@ export default class RegisterUser extends React.Component {
                         <Form.Group className="mx-1 my-3">
                             <Form.Label>Tipo Usuario:</Form.Label>
                             <Form.Control size="sm" as="select" name="tipo" value={this.state.tipo} onChange={this.handleInputChange} required>
-                                <option value="Autor" selected>Autor</option>
-                                <option value="Evaluador">Evaluador</option>
+                                <option value="2" selected>Autor</option>
+                                <option value="3">Evaluador</option>
                             </Form.Control>
+                        </Form.Group>
+                        
+                        <Form.Group className="mx-1 my-3" controlId="formBasic">
+                            <Form.Label>Institución:</Form.Label>
+                            <Form.Control type="text" className="form-control"  name="institucion" value={this.state.institucion} onChange={this.handleInputChange} maxLength="100" required/>
                         </Form.Group>
                         
 

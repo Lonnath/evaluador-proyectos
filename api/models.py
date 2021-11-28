@@ -11,8 +11,9 @@ class User(models.Model):
 class Cuentas(models.Model):
     email = models.EmailField(max_length=255)
     password = models.CharField(max_length=10)
-    user = models.ForeignKey(User, on_delete=models.RESTRICT)
-    tipo_usuario = models.CharField(max_length=20)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    tipo_usuario = models.IntegerField()
+    institucion = models.CharField(max_length=255)
     class Meta:
         db_table = 'cuentas'
 class Archivos(models.Model):
@@ -26,7 +27,7 @@ class Proyectos(models.Model):
     palabras_clave = models.CharField(max_length=255)
     resumen = models.TextField()
     topico = models.CharField(max_length=255)
-    autor = models.ForeignKey(User, on_delete=RESTRICT)
+    autor = models.ForeignKey(Cuentas, on_delete=models.SET_NULL, null=True, blank=True)
     fecha_creacion = models.DateField()
     estado = models.IntegerField(default=2)
     class Meta:

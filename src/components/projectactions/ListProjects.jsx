@@ -6,6 +6,7 @@ import EraseProject from "./EraseProject";
 import API from '../../services/Api'
 export default function ListProjects({admin}){
     const [data, setData] = useState([])
+    const [loading, setLoading] = useState(false)
     useEffect(
         function consultar(){
             let datos = {
@@ -17,19 +18,21 @@ export default function ListProjects({admin}){
                 }
             }else{
                 datos = {
-                    user : JSON.parse(sessionStorage.getItem('sesion')).user_id,
+                    user : JSON.parse(sessionStorage.getItem('sesion')).id,
                 }
             }
             admin ?
             API.post('/api/proyectos/consultar_proyectos_admin', datos).then(
                 response => {
                     setData(JSON.parse(response.data.DATA))
+                    setLoading(true)
                 }
             ) 
             :
             API.post('/api/proyectos/consultar_proyectos_autor', datos).then(
                 response => {
                     setData(JSON.parse(response.data.DATA))
+                    setLoading(true)
                 }
             )
         }
@@ -54,29 +57,37 @@ export default function ListProjects({admin}){
                         </tr>
                     </thead>
                     <tbody>
-                    {
-                    
-                    data.length > 0 ? 
-                        data.map(item => (
-                            <tr >
-                                <td>{item.titulo}</td>
-                                <td>{item.autor}</td>
-                                <td>{item.estado}</td>
-                                <td>No Evaluada</td>
-                                <td>{item.fecha_creacion}</td>
-                                <td><img src={File} alt="" width="30" /></td>
-                                <td><ModifyProject id_proyecto = {item.id_proyecto} /></td>
-                            </tr>
+                        {
+                            loading ?
+                                data.length > 0 ? 
+                                    data.map(item => (
+                                        <tr >
+                                            <td>{item.titulo}</td>
+                                            <td>{item.autor}</td>
+                                            <td>{item.estado}</td>
+                                            <td>No Evaluada</td>
+                                            <td>{item.fecha_creacion}</td>
+                                            <td><img src={File} alt="" width="30" /></td>
+                                            <td><ModifyProject id_proyecto = {item.id_proyecto} /></td>
+                                        </tr>
 
-                        ))
-                    :   
-                        <tr>
-                            <td colSpan={admin?"7":"6"}>
-                                No existen registros.
-                            </td>
+                                    ))
+                                :   
+                                    <tr>
+                                        <td colSpan={admin?"7":"6"}>
+                                            No existen registros.
+                                        </td>
+                                        
+                                    </tr>
+                            :
                             
-                        </tr>
-                    }
+                                <tr>
+                                    <td colSpan={admin?"7":"6"}>
+                                        Cargando...
+                                    </td>
+                                </tr>
+                                
+                        }
                     </tbody>
                 </Table>
             </div>

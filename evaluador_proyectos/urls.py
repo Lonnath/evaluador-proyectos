@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+from api.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
+    
+    # INTERFACE URLS
     path('Admin', TemplateView.as_view(template_name="index.html")),
     path('AssignProjects', TemplateView.as_view(template_name="index.html")),
     path('ModifyProjectsAdmin', TemplateView.as_view(template_name="index.html")),
@@ -30,4 +32,14 @@ urlpatterns = [
     path('RegisterUser', TemplateView.as_view(template_name="index.html")),
     path('RecoveryAccount', TemplateView.as_view(template_name="index.html")),
     path('', TemplateView.as_view(template_name="index.html")),
+
+    # API URLS
+
+    path('api/registrar_usuarios', registrar_usuarios, name='registrar_usuarios' ),
+    path('api/login', login, name='login' ),
+    path('api/proyectos/postular_proyecto', postular_proyecto, name='postular_proyecto' ),
+    path('api/proyectos/consultar_proyectos_admin', consultar_proyectos_admin, name='consultar_proyecto_admin' ),
+    path('api/proyectos/consultar_proyectos_autor', consultar_proyectos_autor, name='consultar_proyecto_autor' ),
+    #path('api/proyectos/modificar_proyectos_autor', modificar_proyectos_autor, name='modificar_proyecto_autor' ),
+    path('api/proyectos/eliminar_proyectos_autor', eliminar_proyectos_autor, name='eliminar_proyecto_autor' ),
 ]
