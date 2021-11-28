@@ -22,6 +22,18 @@ Evaluador Proyectos usar varias tecnologias las cuales son:
 - Python v3.10.0
 - Pip v21.3.1
 - NodeJs v16.13.0
+- asgiref==3.3.4
+- django-cors-headers
+- dj-database-url==0.5.0
+- Django==3.2.3
+- gunicorn==20.1.0
+- pytz==2021.1
+- sqlparse==0.4.1
+- whitenoise==5.2.0
+- django-environ==0.7
+- psycopg2
+- django-heroku
+
 
 
 ## Instalación
