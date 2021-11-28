@@ -1,8 +1,8 @@
 # Evaluador Proyectos
 
-[![Django](./static/markdown/django.png =200x200)](https://docs.djangoproject.com/en/3.2/)
-[![NodeJs](./static/markdown/nodejs.jpg =200x200)](https://nodejs.org/es/)
-[![ReactJs](./static/markdown/reactjs.png =200x200)](https://es.reactjs.org)
+[![Django](./build/static/markdown/django.png =200x200)](https://docs.djangoproject.com/en/3.2/)
+[![NodeJs](./build/static/markdown/nodejs.jpg =200x200)](https://nodejs.org/es/)
+[![ReactJs](./build/static/markdown/reactjs.png =200x200)](https://es.reactjs.org)
 
 El proyecto esta desplegado en un servidor web de heroku, desarrollada con tecnologia Python (Django) y JavaScript (ReactJs libreria usada con Node.js).
 
