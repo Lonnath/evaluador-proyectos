@@ -21,20 +21,24 @@ export default function ListProjects({admin}){
                     user : JSON.parse(sessionStorage.getItem('sesion')).id,
                 }
             }
+            setTimeout(()=>{
+            
             admin ?
-            API.post('/api/proyectos/consultar_proyectos_admin', datos).then(
-                response => {
-                    setData(JSON.parse(response.data.DATA))
-                    setLoading(true)
-                }
-            ) 
-            :
-            API.post('/api/proyectos/consultar_proyectos_autor', datos).then(
-                response => {
-                    setData(JSON.parse(response.data.DATA))
-                    setLoading(true)
-                }
-            )
+                API.post('/api/proyectos/consultar_proyectos_admin', datos).then(
+                    response => {
+                        setData(JSON.parse(response.data.DATA))
+                        setLoading(true)
+                    }
+                ) 
+                :
+                API.post('/api/proyectos/consultar_proyectos_autor', datos).then(
+                    response => {
+                        setData(JSON.parse(response.data.DATA))
+                        setLoading(true)
+                    }
+                )
+            },1000)
+            
         }
     );
     return(
