@@ -35,7 +35,7 @@ SECRET_KEY = 'django-insecure-@z3s+n*^i=jh#lxrb13$!sk13v2*175k*nito^r^#lz+ly05wi
 DEBUG = True
 
 ALLOWED_HOSTS = ['evaluador-proyectos.herokuapp.com']
-ALLOWED_HOSTS = ['127.0.0.1', '.localhost'] # Para desarrollo en local
+#ALLOWED_HOSTS = ['127.0.0.1', '.localhost'] # Para desarrollo en local
 
 
 # Application definition
