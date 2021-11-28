@@ -59,8 +59,8 @@ DATABASE_USERNAME=XXXXXX
 DATABASE_HOST=XXXXXX
 ```
 > **Desarrolladores :**
-> <br> - Luis Alfredo Mejias Valero - 1151839
-> <br> - Alberto José Vergara Vera - 1151840
+> - Luis Alfredo Mejias Valero - 1151839
+> - Alberto José Vergara Vera - 1151840
 
 > **Aprendizaje a cargo del Ingeniero:**
 > - Freddy Humberto Vera
