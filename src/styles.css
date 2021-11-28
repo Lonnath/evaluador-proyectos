@@ -13,20 +13,6 @@ body {
   border-bottom: 2px inset gray;
   border-radius: 3px;
 }
-@keyframes line-border-bottom {
-  0% {
-    border-bottom: 3px inset gray;
-  }
-  50% {
-    border-bottom: 2px inset gray;
-  }
-  75% {
-    border-bottom: 3px inset gray;
-  }
-  100% {
-    border-bottom: 2px inset gray;
-  }
-}
 .text-sha {
   color: white;
   text-decoration: none;
@@ -112,4 +98,24 @@ body {
 }
 .extra-size {
   height: 0px;
+}
+
+.vanish{
+  opacity: 1;
+  animation: vanish-animation 4s normal ease 1;
+}
+@keyframes vanish-animation {
+  40%{
+    opacity: 1;
+  }
+
+  100%{
+    opacity: 0;
+  }
+}
+.carousel-control-prev{
+  position: relative;
+}
+.carousel-control-next{
+  position: relative;
 }

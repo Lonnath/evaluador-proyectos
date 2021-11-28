@@ -17,7 +17,7 @@ export default function HeaderComponentAdmin(){
                             <Nav>
                                 <a href="/Admin" className="text-sha btn btn-dark text-start">Inicio</a>
                                 <a href="/AssignProjects" className="text-sha btn btn-dark text-start">Asignar Proyectos</a>
-                                <a  onClick={cerrar} className="text-sha btn btn-dark text-start">Cerrar Sesion</a>
+                                <div onClick={cerrar} className="text-sha btn btn-dark text-start">Cerrar Sesion</div>
                             </Nav>
                         </Navbar.Collapse>
                 </Container>

@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.deletion import RESTRICT
 
 # Create your models here.
 
@@ -30,5 +29,19 @@ class Proyectos(models.Model):
     autor = models.ForeignKey(Cuentas, on_delete=models.SET_NULL, null=True, blank=True)
     fecha_creacion = models.DateField()
     estado = models.IntegerField(default=2)
+    archivo = models.ForeignKey(Archivos, on_delete=models.SET_NULL, null=True, blank=True)
     class Meta:
         db_table = 'proyectos'
+class Evaluacion (models.Model):
+    descripcion = models.CharField(max_length=255, null=True, blank=True)
+    fecha_reporte = models.DateTimeField()
+    archivo = models.ForeignKey(Archivos,on_delete=models.SET_NULL, null=True, blank=True)
+    valor_evaluacion = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = 'evaluacion'
+class Evaluadores_Asignados(models.Model):
+    usuario = models.ForeignKey(Cuentas, on_delete=models.SET_DEFAULT, default=1)
+    proyecto = models.ForeignKey(Proyectos, on_delete=models.SET_NULL, null=True, blank=True)
+    evaluacion = models.ForeignKey(Evaluacion, on_delete=models.SET_NULL, null=True, blank=True)
+    class Meta:
+        db_table = 'evaluadores_asignados'

@@ -38,8 +38,9 @@ urlpatterns = [
     path('api/registrar_usuarios', registrar_usuarios, name='registrar_usuarios' ),
     path('api/login', login, name='login' ),
     path('api/proyectos/postular_proyecto', postular_proyecto, name='postular_proyecto' ),
-    path('api/proyectos/consultar_proyectos_admin', consultar_proyectos_admin, name='consultar_proyecto_admin' ),
-    path('api/proyectos/consultar_proyectos_autor', consultar_proyectos_autor, name='consultar_proyecto_autor' ),
-    #path('api/proyectos/modificar_proyectos_autor', modificar_proyectos_autor, name='modificar_proyecto_autor' ),
-    path('api/proyectos/eliminar_proyectos_autor', eliminar_proyectos_autor, name='eliminar_proyecto_autor' ),
+    path('api/proyectos/consultar_proyectos', consultar_proyectos, name='consultar_proyectos' ),
+    path('api/proyectos/consultar_proyectos_evaluar', consultar_proyectos_evaluar, name='consultar_proyectos_evaluar' ),
+    path('api/proyectos/eliminar_proyectos', eliminar_proyectos, name='eliminar_proyecto' ),
+    path('api/proyectos/modificar_proyectos', modificar_proyectos, name='modificar_proyecto' ),
+    path('api/consultar_evaluadores', consultar_evaluadores, name='consultar_evaluadores' ),
 ]

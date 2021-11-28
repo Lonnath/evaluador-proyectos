@@ -18,7 +18,7 @@ export default function HeaderComponentEvaluator(){
                                 <a href="/Evaluator" className="text-sha btn btn-dark text-start">Inicio</a>
                                 <a href="/CreateProjectEvaluator" className="text-sha btn btn-dark text-start">Nuevo Proyecto</a>
                                 <a href="/EvaluateProjects" className="text-sha btn btn-dark text-start">Evaluar</a>
-                                <a onClick={cerrar} className="text-sha btn btn-dark text-start">Cerrar Sesion</a>
+                                <div onClick={cerrar} className="text-sha btn btn-dark text-start">Cerrar Sesion</div>
                             </Nav>
                         </Navbar.Collapse>
                 </Container>

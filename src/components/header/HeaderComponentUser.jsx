@@ -17,7 +17,7 @@ export default function HeaderComponentUser(){
                             <Nav>
                                 <a href="/User" className="text-sha btn btn-dark text-start">Inicio</a>
                                 <a href="/CreateProjectUser" className="text-sha btn btn-dark text-start">Nuevo Proyecto</a>
-                                <a onClick={cerrar} className="text-sha btn btn-dark">Cerrar Sesion</a>
+                                <div onClick={cerrar} className="text-sha btn btn-dark">Cerrar Sesion</div>
                             </Nav>
                         </Navbar.Collapse>
                 </Container>

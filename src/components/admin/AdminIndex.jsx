@@ -3,7 +3,7 @@ import ListProjects from "../projectactions/ListProjects";
 export default function AdminIndex(){
     return(
         <>
-            <ListProjects admin ={true}/>
+            <ListProjects admin ={true} />
         </>
     );
 }

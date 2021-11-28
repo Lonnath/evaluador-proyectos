@@ -1,16 +1,26 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Button, Modal} from 'react-bootstrap'
 import ModifyProjectForm from "./ModifyProjectForm"
-export default function ModifyProject ({id_proyecto}){
+export default function ModifyProject ({data, disabled}){
     const [show, setShow] = useState(false);
+    const [boton, setBoton] = useState("boton"+data.id_proyecto+"modify");
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    useEffect(
+        
+        function boton_funcion (){
+            if(disabled){
+                document.getElementById(boton).disabled = true;
+            }else{
+                document.getElementById(boton).disabled = false;
+            }
+        }
+    );
     return (
         <>
-            <Button variant="outline-warning" className="w-50" onClick={handleShow} >
+            <Button id = {boton} variant={disabled ? "outline-warning" : "warning"} className="w-50 mr-2" onClick={handleShow}>
                 Modificar
             </Button>
-    
             <Modal 
                 show={show}
                 onHide={handleClose}
@@ -22,7 +32,7 @@ export default function ModifyProject ({id_proyecto}){
                 </Modal.Header>
             
                 <Modal.Body>
-                    <ModifyProjectForm handleClose = {handleClose} />
+                    <ModifyProjectForm handleClose = {handleClose} data = {data}/>
                 </Modal.Body>
             </Modal>
         </>
