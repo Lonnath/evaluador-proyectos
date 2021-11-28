@@ -4,6 +4,9 @@
 <a href="https://nodejs.org/es/"><img src="https://evaluador-proyectos.herokuapp.com/static/markdown/nodejs.jpg" width="70" heigth="100"></a>
 <a href="https://es.reactjs.org"><img src="https://evaluador-proyectos.herokuapp.com/static/markdown/reactjs.png" width="70" heigth="100"></a>
 
+> URL de producción = https://evaluador-proyectos.herokuapp.com
+
+
 El proyecto esta desplegado en un servidor web de heroku, desarrollada con tecnologia Python (Django) y JavaScript (ReactJs libreria usada con Node.js).
 
 ## Tecnologias
