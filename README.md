@@ -1,70 +1,70 @@
-# Getting Started with Create React App
+# Evaluador Proyectos
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![Django](./static/markdown/django.png =200x200)](https://docs.djangoproject.com/en/3.2/)
+[![NodeJs](./static/markdown/nodejs.jpg =200x200)](https://nodejs.org/es/)
+[![ReactJs](./static/markdown/reactjs.png =200x200)](https://es.reactjs.org)
 
-## Available Scripts
+El proyecto esta desplegado en un servidor web de heroku, desarrollada con tecnologia Python (Django) y JavaScript (ReactJs libreria usada con Node.js).
 
-In the project directory, you can run:
+## Tecnologias
 
-### `yarn start`
+Evaluador Proyectos usar varias tecnologias las cuales son:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- [NodeJs] - es un entorno en tiempo de ejecución multiplataforma, de código abierto, para la capa del servidor basado en el lenguaje de programación JavaScript, asíncrono, con E/S de datos en una arquitectura orientada a eventos y basado en el motor V8 de Google.
+- [ReactJS] - es una biblioteca Javascript de código abierto diseñada para crear interfaces de usuario con el objetivo de facilitar el desarrollo de aplicaciones en una sola página.
+- [Django] - es un framework de desarrollo web de código abierto, escrito en Python, que respeta el patrón de diseño conocido como modelo–vista–controlador.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Requerimientos
 
-### `yarn test`
+- Python v3.10.0
+- Pip v21.3.1
+- NodeJs v16.13.0
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+## Instalación
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+El proyecto requiere de NodeJs v16.13.0, Python v3.10.0 (La version 3.9 tambien es compatible) para su funcionamiento correcto.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+> Nota: Situados en la carpeta del proyecto
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Instalando dependencias para el funcionamiento con ReactJs.
+```sh
+npm install
+```
 
-### `yarn eject`
+Instalando librerias de Django y python necesarias para el funcionamiento de la api-rest.
+```sh
+pip install -r requirements.txt
+```
+Para ver reflejados modificaciones en el proyecto en local o en el entorno de producción...
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```sh
+npm run build
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Despliegue local
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Para el funcionamiento en local con base de datos crear un archivo .env en la ruta raiz del proyecto definiendo las variables
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+```sh
+DATABASE_NAME=XXXXXX
+DATABASE_PASSWORD=XXXXX
+DATABASE_PORT=XXXX
+DATABASE_URL=XXXXXXX
+DATABASE_USERNAME=XXXXXX
+DATABASE_HOST=XXXXXX
+```
+> **Desarrolladores :**
+> Luis Alfredo Mejias Valero - 1151839
+> Alberto José Vergara Vera - 1151840
+> **Aprendizaje a cargo del Ingeniero:**
+> Freddy Humberto Vera
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+>**Este proyecto es desarrollado con fines academicos y no lucrativos**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   [NodeJs]: <https://nodejs.org/es/docs/>
+   [Django]: <https://docs.djangoproject.com/en/3.2/>
+   [ReactJs]: <https://es.reactjs.org/docs/getting-started.html>
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
