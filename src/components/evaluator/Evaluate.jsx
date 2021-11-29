@@ -32,7 +32,9 @@ export default class Evaluate extends React.Component{
     componentDidUpdate(){
         this.consultar();
         if(this.state.notificacion===true){
-            this.state.notificacion=false;
+            setTimeout(()=>{
+                this.state.notificacion=false;
+            }, 5000);
         }
     }
 
