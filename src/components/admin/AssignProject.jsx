@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { Table } from "react-bootstrap";
 import File from '../../images/file.png';
 import AssignComponent from './AssignComponent';
@@ -14,16 +14,14 @@ export default class ListAssign extends React.Component{
         this.consultar();  
     }
     consultar (){
-        let datos = {
+        const datos = {
             user : JSON.parse(sessionStorage.getItem('sesion')).id,
         }
-        setTimeout(()=>{
-            API.post('/api/proyectos/consultar_proyectos_evaluar', datos).then(
-                response => {
-                    this.setState({data:JSON.parse(response.data.DATA), loading : true});
-                }
-            )
-        },2000)
+        API.post('/api/proyectos/consultar_proyectos_evaluar', datos).then(
+            response => {
+                this.setState({data:JSON.parse(response.data.DATA), loading : true});
+            }
+        )
         
     }
     componentDidUpdate(){

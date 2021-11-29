@@ -7,56 +7,63 @@ export default class AssignForm extends React.Component {
         super(props);
         this.state = {
             observaciones : "",
-            evaluacion : "",
-            archivo : undefined,
-            evaluator : "",
+            archivo : "",
+            evaluador : 0,
+            evaluacion: 0,
             handleClose : props.handleClose,
-            evaluadores : {},
             alerta : undefined,
             loading : true,
-            setFirstOpt : props.setFirstOpt,
+            evaluadores:{},
+            data:  props.data ? props.data : "",
         };
-        const datos = {
-            id_admin : JSON.parse(sessionStorage.getItem('sesion')).id,
-        }
-        API.post('api/consultar_evaluadores', datos).then(
-            (response) => {
-                this.setState({evaluadores:response.data.DATA})
-            }
-        );
+        this.consultar();
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         
     }
-  
+    consultar(){
+        const data = {
+            id_admin : JSON.parse(sessionStorage.getItem('sesion')).id,
+        }
+        API.post('api/consultar_evaluadores', data).then(
+            (response) => {
+                this.setState({evaluadores:response.data.DATA})
+            }
+        );
+    }
+
     handleInputChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
         this.setState({
-            [name]: value
+          [name]: value
         });
-    }
+      }
     handleSubmit(event) {
-        let today = new Date();
-        const now = String(today.getDate()).padStart(2, '0') + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + today.getFullYear();
-        const data = {
-            observaciones : this.state.observaciones,
-            evaluacion : this.state.evaluacion,
-            archivo : this.state.archivo,
-            evaluator : this.state.evaluator,
+        const informacion = {
+            id_admin: JSON.parse(sessionStorage.getItem('sesion')).id,
+            proyecto: this.state.data.id_proyecto,
+            evaluacion: this.state.evaluacion,
+            observaciones: this.state.observaciones,
+            archivo: this.state.archivo,
+            evaluador: this.state.evaluador,
         }
+        this.setState({loading:false}); 
         
-        this.setState({loading:false});  
-        setTimeout(() => {
-            this.setState({alerta:<Alert key="alert" variant="success">
-                Evaluación Realizada con exito.
-              </Alert>})
-            this.setState({loading:true});
-            this.state.setFirstOpt();
-
-        }, 2000);
-        event.preventDefault();    
+        API.post('api/asignar_evaluador', informacion).then(
+            (response) => {
+                this.setState({alerta : <Alert variant={response.data.CODE === 1 ? 
+                "success" : "warning"} className={response.data.CODE===1?"vanish" : ""}>{response.data.MESSAGE}</Alert>, loading : true})
+                setTimeout(()=>{
+                    if(response.data.CODE===1){
+                        this.setState({alerta:""})
+                    }
+                }, 4000);
+            }
+        )
+        
+        event.preventDefault(); 
     }
     render() {
         return (
@@ -75,7 +82,7 @@ export default class AssignForm extends React.Component {
                     </Form.Group>
                     
                     <Form.Group controlId="formFile" className="my-2">
-                        <Form.Label>Cargar documentacion con las correcciones del proyecto</Form.Label>
+                        <Form.Label>Cargar soportes de evaluación.</Form.Label>
                         <Form.Control type="file" name="archivo" value={this.state.archivo} onChange={this.handleInputChange}  />
                     </Form.Group>
                     <Row>
@@ -83,25 +90,27 @@ export default class AssignForm extends React.Component {
                             <Form.Group className="mx-1 my-2">
                                 <Form.Label>Evaluacion:</Form.Label>
                                 <Form.Control size="sm" as="select" name="evaluacion" value={this.state.evaluacion} onChange={this.handleInputChange} >
-                                    <option>Aceptado</option>
-                                    <option>Rechazado</option>
-                                    <option>Devuelto</option>
+                                    <option value="0">No evaluar</option>
+                                    <option value="1">Aceptado</option>
+                                    <option value="2">Rechazado</option>
+                                    <option value="3">Devuelto</option>
                                 </Form.Control>
                             </Form.Group>
                         </Col>
                         <Col>
                             <Form.Group className="mx-1 my-2">
                                 <Form.Label>Evaluador:</Form.Label>
-                                <Form.Control size="sm" as="select" name="evaluator " value={this.state.evaluator    } onChange={this.handleInputChange} >
-                                {
-                                    
-                                    this.state.evaluadores.length > 0 ? 
-                                        this.state.evaluadores.map(item => (
-                                            <option value={item.id}>{item.documento} ~ {item.nombre}</option>
-                                        ))
-                                    :   <option value="">No Seleccionar</option>
-                                        
-                                }
+                                <Form.Control size="sm" as="select" name="evaluador" value={this.state.evaluador} onChange={this.handleInputChange} >
+                                    <option value="0">No Seleccionar</option>
+                                    {
+                                        this.state.evaluadores.length > 0 ? 
+                                                this.state.evaluadores.map(item => (
+                                                        <option value={item.id}>{item.documento} ~ {item.nombre}</option>
+                                                    )
+                                                ) 
+                                        : <></>
+                                            
+                                    }
                                 </Form.Control>
                             </Form.Group>
                         
@@ -113,11 +122,19 @@ export default class AssignForm extends React.Component {
                             this.state.loading ? this.state.alerta : <div class="d-flex justify-content-center mb-2"><SpinnerComponent /></div>
                         }
                     </div>
-                    <div className="d-flex justify-content-end mb-2"> 
-                        <Button variant="success" className="close-button" type="submit">
-                            Asignar
-                        </Button>
-                    </div>
+                    <Row className="my-5">
+                        <Col>
+                            <div className="d-flex justify-content-end">
+
+                                <Button variant="success" className="close-button me-3" type="submit">
+                                    Asignar
+                                </Button>
+                                <Button variant="secondary" onClick={this.state.handleClose} className="close-button me-4">
+                                    Cerrar
+                                </Button>
+                            </div>
+                        </Col>
+                    </Row>
                 </Form>
             </div>
         );

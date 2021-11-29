@@ -29,8 +29,7 @@ export default class LoginFrom extends React.Component {
         }
         event.preventDefault(); 
         this.setState({loading:false}); 
-        setTimeout(() => {
-            API.post('/api/login', data).then(
+        API.post('/api/login', data).then(
                 response => {
                     response.data.CODE === 2 ? this.setState({alerta : <Alert variant={response.data.CODE === 2 ? "warning" : ""}>{response.data.MESSAGE}</Alert>, loading : true}) : console.log();
                     const datos = JSON.parse(response.data.DATA)
@@ -47,8 +46,7 @@ export default class LoginFrom extends React.Component {
                 
             }
                 
-            );
-        }, 2000);
+        );
         
         
         event.preventDefault(); 

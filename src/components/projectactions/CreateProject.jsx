@@ -38,12 +38,10 @@ export default class CreateProject extends React.Component {
             now : timenow,
         }
         this.setState({loading:false}); 
-        setTimeout(() => {
-            API.post('/api/proyectos/postular_proyecto', data).then(
+        API.post('/api/proyectos/postular_proyecto', data).then(
                 response => this.setState({alerta : <Alert variant={response.data.CODE === 1 ? 
                     "success" : "warning"} className="vanish">{response.data.MESSAGE}</Alert>, loading : true})
             ) 
-        }, 1000);
         
         
         event.preventDefault(); 

@@ -39,12 +39,10 @@ export default class RegisterUser extends React.Component {
         }
         
         this.setState({loading:false});
-        setTimeout(() => {
-            API.post('/api/registrar_usuarios', data).then(
+        API.post('/api/registrar_usuarios', data).then(
                 response => this.setState({alerta : <Alert variant={response.data.CODE === 1 ? 
                     "success" : "warning"} className="vanish">{response.data.MESSAGE}</Alert>, loading : true})
-            ) 
-        }, 1000);
+        );
         setTimeout(() => {
             this.setState({alerta:""});
             window.location = "/";

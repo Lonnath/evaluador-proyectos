@@ -3,6 +3,7 @@ import { Table } from "react-bootstrap";
 import File from '../../images/file.png';
 import ModifyProject from "./ModifyProject";
 import EraseProject from "./EraseProject";
+import ModalEvaluaciones from "./ModalEvaluaciones";
 import API from '../../services/Api'
 export default class ListProjects extends React.Component{
     constructor(props) {
@@ -18,13 +19,11 @@ export default class ListProjects extends React.Component{
         let datos = {
             user : JSON.parse(sessionStorage.getItem('sesion')).id,
         }
-        setTimeout(()=>{
-            API.post('/api/proyectos/consultar_proyectos', datos).then(
+        API.post('/api/proyectos/consultar_proyectos', datos).then(
                 response => {
                     this.setState({data:JSON.parse(response.data.DATA), loading : true});
                 }
-            );
-        },2000)
+        );
         
     }
     componentDidUpdate(){
@@ -59,7 +58,7 @@ export default class ListProjects extends React.Component{
                                                 <td>{item.titulo}</td>
                                                 <td>{item.autor}</td>
                                                 <td>{item.estado}</td>
-                                                <td>No Evaluada</td>
+                                                {this.state.admin ? <th><ModalEvaluaciones data={item} /></th> : <></>}
                                                 <td>{item.fecha_creacion}</td>
                                                 <td><img src={File} alt="" width="30" /></td>
                                                 <td>
@@ -87,6 +86,7 @@ export default class ListProjects extends React.Component{
                             }
                         </tbody>
                     </Table>
+                    
                 </div>
             </>
         )

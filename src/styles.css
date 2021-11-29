@@ -75,8 +75,9 @@ body {
   overflow-y: scroll;
 }
 .alertP {
-  margin-left: 0%;
+  margin-left: 60%;
   width: 400px !important;
+  overflow: hidden !important;
   animation: alertP-animation 1s normal ease 1;
 }
 @keyframes alertP-animation {
@@ -84,7 +85,7 @@ body {
     margin-left: 1000%;
   }
   100% {
-    margin-left: 0%;
+    margin-left: 60%;
   }
 }
 .responsive-design {
@@ -118,4 +119,10 @@ body {
 }
 .carousel-control-next{
   position: relative;
+}
+
+.pos-carousel{
+  width: 80%;
+  margin-left: 10%;
+  margin-top: -50px !important;
 }

@@ -39,23 +39,21 @@ export default class ModifyProjectForm extends React.Component {
             file : this.state.file,
         }
         this.setState({loading:false});
-        setTimeout(() => {
-            API.post('/api/proyectos/modificar_proyectos', data).then(
-                (response) => {
-                    this.setState({alerta : <Alert variant={response.data.CODE === 1 ? 
-                    "success" : "warning"} className={response.data.CODE === 1 ? 
-                        "vanish" : ""}>{response.data.MESSAGE}</Alert>, loading : true})
-                    if (response.data.CODE === 1){
-                        setTimeout(
-                            () => {
-                                this.setState({alerta:""});
-                            }, 4000
-                        );
-                    }
-                        
-                }            
-            );
-        }, 1000);
+        API.post('/api/proyectos/modificar_proyectos', data).then(
+            (response) => {
+                this.setState({alerta : <Alert variant={response.data.CODE === 1 ? 
+                "success" : "warning"} className={response.data.CODE === 1 ? 
+                    "vanish" : ""}>{response.data.MESSAGE}</Alert>, loading : true})
+                if (response.data.CODE === 1){
+                    setTimeout(
+                        () => {
+                            this.setState({alerta:""});
+                        }, 4000
+                    );
+                }
+                    
+            }            
+        );
         
         
         event.preventDefault(); 
