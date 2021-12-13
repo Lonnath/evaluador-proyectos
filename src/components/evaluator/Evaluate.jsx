@@ -21,10 +21,14 @@ export default class Evaluate extends React.Component{
         }
         API.post('/api/consultar_evaluaciones_evaluador', datos).then(
             response => {
-                if(this.state.data.length!=JSON.parse(response.data.DATA).length){
-                    this.state.notificacion = true;
+                try{
+                    if(this.state.data.length!=JSON.parse(response.data.DATA).length){
+                        this.state.notificacion = true;
+                    }
+                    this.setState({data:JSON.parse(response.data.DATA), loading : true});
+                }catch(e){
+                    this.setState({loading : true});
                 }
-                this.setState({data:JSON.parse(response.data.DATA), loading : true});
             }
         )
         

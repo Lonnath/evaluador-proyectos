@@ -18,7 +18,7 @@ export default function ModifyProject ({data, disabled}){
     );
     return (
         <>
-            <Button id = {boton} variant={disabled ? "outline-warning" : "warning"} className="w-50 mr-2" onClick={handleShow}>
+            <Button id = {boton} variant={disabled ? "outline-warning" : "warning"} className="btn-per mr-2" onClick={handleShow}>
                 Modificar
             </Button>
             <Modal 

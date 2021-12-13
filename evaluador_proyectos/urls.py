@@ -46,5 +46,5 @@ urlpatterns = [
     path('api/consultar_evaluaciones', consultar_evaluaciones, name='consultar_evaluaciones'),
     path('api/consultar_evaluaciones_evaluador', consultar_evaluaciones_evaluador, name='consultar_evaluaciones_evaluador'),
     path('api/asignar_evaluador', asignar_evaluador, name='asignar_evaluador'),
-    #path('api/evaluar_proyecto_evaluador', evaluar_proyecto_evaluador, name='evaluar_proyecto_evaluador'),
+    path('api/evaluar_proyecto_evaluador', evaluar_proyecto_evaluador, name='evaluar_proyecto_evaluador'),
 ]

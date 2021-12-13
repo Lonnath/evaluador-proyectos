@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.core import serializers
+from django.core.signing import Signer
 from api.models import *
 import datetime
 import json
@@ -17,9 +17,9 @@ def registrar_usuarios(request):
             institucion = jd['institucion'] if 'institucion' in jd else None
             if not documento or not nombre or not email or not contrasenia or not tipo_usuario or not institucion :
                 return JsonResponse({'CODE':2, 'MESSAGE':'Faltan datos.', 'DATA': "ERROR."})
-            
+            signer = Signer()
             usuario = User(documento=documento, nombre=nombre)
-            cuenta = Cuentas(email=email.lower(), password=contrasenia, tipo_usuario=tipo_usuario, user=usuario, institucion=institucion)
+            cuenta = Cuentas(email=email.lower(), password=signer.sign(contrasenia), tipo_usuario=tipo_usuario, user=usuario, institucion=institucion)
             usuario.save()
             cuenta.save()
             return JsonResponse({'CODE':1, 'MESSAGE':'Se ha registrado exitosamente en el portal, será redireccionado a la pagina principal en un momento.', 'DATA': 'Ok'})    
@@ -34,12 +34,17 @@ def login(request):
         password = jd['password'] if 'password' in jd else None
         if not email or not password :
                 return JsonResponse({'CODE':2, 'MESSAGE':'Faltan datos.', 'DATA': "ERROR."})
-        acceso = Cuentas.objects.filter(email=email.lower(), password=password).values('id', 'email', 'tipo_usuario', 'user_id')
-        out = json.dumps(acceso[0])
-        if out :
-            return JsonResponse({'CODE':1, 'MESSAGE':'Acceso Permitido', 'DATA': out})
-        else:
+        signer = Signer()
+        try:
+            acceso = Cuentas.objects.filter(email=email.lower(), password=signer.sign(password)).values('id', 'email', 'tipo_usuario', 'user_id')
+            out = json.dumps(acceso[0])
+            if out :
+                return JsonResponse({'CODE':1, 'MESSAGE':'Acceso Permitido', 'DATA': out})
+            else:
+                return JsonResponse({'CODE':2, 'MESSAGE':'Acceso Denegado, Verifique los datos de acceso.', 'DATA': 'ERROR'})
+        except Exception as e:
             return JsonResponse({'CODE':2, 'MESSAGE':'Acceso Denegado, Verifique los datos de acceso.', 'DATA': 'ERROR'})
+
 @csrf_exempt
 def consultar_proyectos(request):
     try:
@@ -196,15 +201,19 @@ def asignar_evaluador(request):
             evaluador = int(jd['evaluador']) if 'evaluador' in jd else None
             if not evaluador and not evaluacion:
                 return JsonResponse({'CODE':2, 'MESSAGE':'Debe evaluar o asignar evaluador, campos no seleccionados.', 'DATA': "ERROR."})
+            if evaluador and evaluacion:
+                return JsonResponse({'CODE':2, 'MESSAGE':'Debe evaluar o asignar evaluador, no realizar las dos acciones al tiempo.', 'DATA': "ERROR."})
+            
             if not id_admin or not proyecto:
                 return JsonResponse({'CODE':2, 'MESSAGE':'Faltan datos.', 'DATA': "ERROR."})
             admin = Cuentas.objects.get(id=id_admin)
             if admin.tipo_usuario != 1:
                 return JsonResponse({'CODE':2, 'MESSAGE':'Acceso Denegado.', 'DATA': "ERROR."})    
             
-            evaluacion_consulta = Evaluacion(descripcion = observaciones, fecha_reporte = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor_evaluacion = evaluacion)
+            evaluacion_consulta = Evaluacion(descripcion = observaciones, fecha_reporte = datetime.datetime.now().strftime("%Y-%m-%d"), valor_evaluacion = evaluacion)
             proyecto_consulta = Proyectos.objects.get(id=proyecto)
-            
+            if proyecto_consulta.autor.id == evaluador:
+                return JsonResponse({'CODE':2, 'MESSAGE':'El autor no puede evaluar su propio proyecto, escoja otro evaluador.', 'DATA': "ERROR."}) 
             if evaluacion > 0:
                 proyecto_consulta.estado = 1
             else:
@@ -215,6 +224,9 @@ def asignar_evaluador(request):
                 if evaluador > 0 :
                     accion ="Asignación realizada con exito."
                     evaluador = Cuentas.objects.get(id=evaluador)
+                    evaluacion_asignada = Evaluadores_Asignados.objects.filter(proyecto=proyecto_consulta, usuario = evaluador)
+                    if evaluacion_asignada:
+                        return JsonResponse({'CODE':2, 'MESSAGE':'Evaluador asignado con anterioridad al mismo proyecto.', 'DATA': "ERROR."})    
                     if evaluador.tipo_usuario != 3:
                         return JsonResponse({'CODE':2, 'MESSAGE':'Usuario no es evaluador.', 'DATA': "ERROR."})    
                     asignar_evaluador.usuario = evaluador
@@ -226,6 +238,7 @@ def asignar_evaluador(request):
                     asignar_evaluador.save()
                     return JsonResponse({'CODE':1, 'MESSAGE': accion, 'DATA': "Ok."})
                 except Exception as e:
+                    print(e)
                     return JsonResponse({'CODE':2, 'MESSAGE':'No se pudo realizar la evaluación, verifique la información suministrada.', 'DATA': "ERROR."})    
             else:
                 return JsonResponse({'CODE':2, 'MESSAGE':'Proyecto no existe.', 'DATA': "ERROR."})
@@ -292,8 +305,7 @@ def consultar_evaluaciones(request):
                     archivo = x.evaluacion.archivo.id
                 else:
                     archivo = "Sin archivo."
-                out.append({'evaluador': str(x.usuario.user.documento+"~"+x.usuario.user.nombre), 'fecha_reporte': x.evaluacion.fecha_reporte.strftime("%Y-%m-%d %H:%M:%S"), 'observacion': descripcion, 'evaluacion': evaluacion, 'archivo' : archivo})
-            
+                out.append({'evaluador': str(x.usuario.user.documento+"~"+x.usuario.user.nombre), 'fecha_reporte': x.evaluacion.fecha_reporte.strftime("%Y-%m-%d"), 'observacion': descripcion, 'evaluacion': evaluacion, 'archivo' : archivo})
             if len(out) > 0:
                 out = json.dumps(out)
                 return JsonResponse({'CODE':1, 'MESSAGE':'Consulta realizada con exito.', 'DATA': out})    
@@ -314,6 +326,7 @@ def consultar_evaluaciones_evaluador(request):
             if usuario.tipo_usuario != 3:
                 return JsonResponse({'CODE':2, 'MESSAGE':'Acceso Denegado.', 'DATA': "ERROR."})
             evaluaciones = Evaluadores_Asignados.objects.all().filter(usuario=usuario)
+            
             out = []
             for x in evaluaciones:
                 if x.evaluacion.valor_evaluacion == 0:
@@ -328,67 +341,37 @@ def consultar_evaluaciones_evaluador(request):
                         estado = "PENDIENTE"
                     elif x.proyecto.estado == 3:
                         estado = "EN EVALUACION"
-                    out.append({'id_evaluacion': x.id, 'autor': str(x.proyecto.autor.user.documento+"~"+x.proyecto.autor.user.nombre) , 'titulo': x.proyecto.titulo, 'fecha_creacion': x.evaluacion.fecha_reporte.strftime("%Y-%m-%d %H:%M:%S"), 'archivo': archivo, 'estado': estado, 'keysword': x.proyecto.palabras_clave, 'resumen':x.proyecto.resumen, 'topico':x.proyecto.topico})
-            
+                    out.append({'id_evaluacion': x.id, 'autor': str(x.proyecto.autor.user.documento+"~"+x.proyecto.autor.user.nombre) , 'titulo': x.proyecto.titulo, 'fecha_creacion': x.evaluacion.fecha_reporte.strftime("%Y-%m-%d"), 'archivo': archivo, 'estado': estado, 'keysword': x.proyecto.palabras_clave, 'resumen':x.proyecto.resumen, 'topico':x.proyecto.topico})
             if len(out) > 0:
                 out = json.dumps(out)
                 return JsonResponse({'CODE':1, 'MESSAGE':'Consulta realizada con exito.', 'DATA': out})    
             else:
-                return JsonResponse({'CODE':2, 'MESSAGE':'No se encontraron registros.', 'DATA': "ERROR."})    
+                return JsonResponse({'CODE':2, 'MESSAGE':'No se encontraron registros.', 'DATA': {}})    
     except Exception as e:
         print(e)
         return JsonResponse({'CODE':2, 'MESSAGE':'Fallo del Servidor, consultar con soporte.', 'DATA': 'ERROR'})
-"""@csrf_exempt
+@csrf_exempt
 def evaluar_proyecto_evaluador(request):
     try:
         jd = json.loads(request.body)
         if jd:
             user = jd['user'] if 'user' in jd else None
-            proyecto = jd['proyecto'] if 'proyecto' in jd else None
+            id_evaluacion = jd['id_evaluacion'] if 'id_evaluacion' in jd else None
             observaciones = jd['observaciones'] if 'observaciones' in jd else None
             evaluacion = int(jd['evaluacion']) if 'evaluacion' in jd else None
-            if not user or not proyecto or not observaciones or not evaluacion:
+            if not user or not id_evaluacion or not evaluacion:
                 return JsonResponse({'CODE':2, 'MESSAGE':'Faltan datos.', 'DATA': "ERROR."})
-            evaluador = Cuentas.objects.get(id = user)
-
-            if evaluador != 3:
-                return JsonResponse({'CODE':2, 'MESSAGE':'Acceso Denegado.', 'DATA': "ERROR."})
-            proyecto = Proyectos.objects.get(id=proyecto)
-            if not proyecto:
-                return JsonResponse({'CODE':2, 'MESSAGE':'Acción no valida, Posible causa: Proyecto Eliminado.', 'DATA': "ERROR."})
-            out = []
-            evaluacion_accion = Evaluacion(descripcion = observaciones, fecha_reporte = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), valor_evaluacion = evaluacion)
-
+            evaluacion_asignada = Evaluadores_Asignados.objects.get(id=id_evaluacion)
+            evaluacion_mod = Evaluacion.objects.get(id=evaluacion_asignada.evaluacion.id)
+            evaluacion_mod.descripcion = observaciones
+            evaluacion_mod.valor_evaluacion = evaluacion
+            evaluacion_mod.fecha_reporte = datetime.datetime.now().strftime("%Y-%m-%d")
+            evaluacion_mod.save()
+            proyecto = Proyectos.objects.get(id = evaluacion_asignada.proyecto.id)
+            proyecto.estado = 1
+            proyecto.save()
+            return JsonResponse({'CODE':1, 'MESSAGE':'Evaluación realizada con exito.', 'DATA': 'Ok.'})
             
-            for x in evaluaciones:
-                descripcion = ""
-                evaluacion = ""
-                archivo = ""
-                if x.evaluacion.descripcion:
-                    descripcion = x.evaluacion.descripcion
-                else:
-                    descripcion = "Sin observación"
-                if int(x.evaluacion.valor_evaluacion) > 0:
-                    if int(x.evaluacion.valor_evaluacion) == 1:
-                        evaluacion = "ACEPTADO"
-                    elif int(x.evaluacion.valor_evaluacion) == 2:
-                        evaluacion = "RECHAZADO"
-                    elif int(x.evaluacion.valor_evaluacion) == 3:
-                        evaluacion = "DEVUELTO"
-                else:
-                    evaluacion = "No ha sido evaluado."
-                
-                if x.evaluacion.archivo:
-                    archivo = x.evaluacion.archivo.id
-                else:
-                    archivo = "Sin archivo."
-                out.append({'evaluador': str(x.usuario.user.documento+"~"+x.usuario.user.nombre), 'fecha_reporte': x.evaluacion.fecha_reporte.strftime("%Y-%m-%d %H:%M:%S"), 'observacion': descripcion, 'evaluacion': evaluacion, 'archivo' : archivo})
-            
-            if len(out) > 0:
-                out = json.dumps(out)
-                return JsonResponse({'CODE':1, 'MESSAGE':'Consulta realizada con exito.', 'DATA': out})    
-            else:
-                return JsonResponse({'CODE':2, 'MESSAGE':'No se encontraron registros.', 'DATA': "ERROR."})    
     except Exception as e:
         print(e)
-        return JsonResponse({'CODE':2, 'MESSAGE':'Fallo del Servidor, consultar con soporte.', 'DATA': 'ERROR'})"""
+        return JsonResponse({'CODE':2, 'MESSAGE':'No se pudo realizar la evaluación, verifique los campos diligenciados.', 'DATA': 'ERROR'})

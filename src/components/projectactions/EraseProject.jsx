@@ -42,7 +42,7 @@ export default function EraseProject ({data, disabled}){
     }
     return (
         <>
-            <Button id = {boton} variant={disabled? "outline-danger" :  "danger"} className="w-50 mr-2" onClick={handleShow} >
+            <Button id = {boton} variant={disabled? "outline-danger" :  "danger"} className="btn-per ms-4" onClick={handleShow} >
                 Eliminar
             </Button>
             <Modal 

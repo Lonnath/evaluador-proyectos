@@ -30,7 +30,7 @@ export default class AssignForm extends React.Component {
     handleSubmit(event) {
         const informacion = {
             user: JSON.parse(sessionStorage.getItem('sesion')).id,
-            proyecto: this.state.data.id_proyecto,
+            id_evaluacion: this.state.data.id_evaluacion,
             evaluacion: this.state.evaluacion,
             observaciones: this.state.observaciones,
             archivo: this.state.archivo,
